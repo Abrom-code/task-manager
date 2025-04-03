@@ -106,6 +106,9 @@ function DisplayTasks() {
         </div>
       </div>
       <div className=" grid justify-center md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        {filteredTasks.length === 0 && (
+          <p>Opps..No Task! Please create task!</p>
+        )}
         {filteredTasks &&
           filteredTasks.map((task) => <TaskBox key={task.id} task={task} />)}
       </div>
