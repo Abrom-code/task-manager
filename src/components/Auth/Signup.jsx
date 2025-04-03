@@ -20,7 +20,7 @@ function Signup() {
 
   useEffect(() => {
     if (data?.userData) {
-      console.log(data.userData);
+      localStorage.setItem("user", JSON.stringify(data.userData));
       dispatch(authActions.setUser(data.userData));
       navigate("/dashboard");
     }
@@ -44,7 +44,7 @@ function Signup() {
       <PasswordInput placeholder="Confirm password" name="confirm" />
 
       <button className=" my-4 bg-green-700 px-2 py-1 rounded font-bold cursor-pointer ">
-        {submitting ? "Submitting..." : "SIGN IN"}
+        {submitting ? "Submitting..." : "SIGN UP"}
       </button>
       <div className=" flex justify-between mb-0 px-2 ">
         <p>Already have an account?</p>

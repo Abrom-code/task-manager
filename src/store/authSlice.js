@@ -35,8 +35,8 @@ export const signUpAction = async ({ request }) => {
   if (!email || !password || !confirm)
     return { error: "Please fill Each Fields!" };
 
-  if (password.trim().length < 4)
-    return { error: "The password must be atleast 8 character!" };
+  if (password.trim().length < 6)
+    return { error: "The password must be atleast 6 character!" };
 
   if (password !== confirm)
     return { error: "Please confirm the correct password!" };
@@ -44,6 +44,31 @@ export const signUpAction = async ({ request }) => {
   try {
     const user = (await createUserWithEmailAndPassword(auth, email, password))
       .user;
+
+    const userData = {
+      uid: user.uid,
+      email: user.email,
+      accessToken: user.accessToken,
+    };
+    return { userData };
+  } catch (error) {
+    return { error: error.code };
+  }
+};
+
+export const login = async ({ request }) => {
+  const data = await request.formData();
+
+  const email = data.get("email");
+  const password = data.get("password");
+
+  if (!email || !password) return { error: "Please fill Each Fields!" };
+
+  if (password.trim().length < 6)
+    return { error: "The password must be atleast6 character!" };
+
+  try {
+    const user = (await signInWithEmailAndPassword(auth, email, password)).user;
 
     const userData = {
       uid: user.uid,

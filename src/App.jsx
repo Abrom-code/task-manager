@@ -12,7 +12,7 @@ import DisplayPage from "./pages/DisplayPage";
 import UpdatePage from "./pages/UpdatePage";
 import EditPage from "./pages/EditPage";
 
-import { signUpAction } from "./store/authSlice";
+import { signUpAction, login as loginAction } from "./store/authSlice";
 import { useSelector } from "react-redux";
 import { protectiveLoader } from "./pages/protectiveLoader";
 
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
           { path: "newtask", element: <CreatePage /> },
         ],
       },
-      { path: "login", element: <LoginPage /> },
+      { path: "login", element: <LoginPage />, action: loginAction },
       { path: "signup", element: <SignupPage />, action: signUpAction },
     ],
   },
