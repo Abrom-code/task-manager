@@ -12,6 +12,10 @@ import DisplayPage from "./pages/DisplayPage";
 import UpdatePage from "./pages/UpdatePage";
 import EditPage from "./pages/EditPage";
 
+import { signUpAction } from "./store/authSlice";
+import { useSelector } from "react-redux";
+import { protectiveLoader } from "./pages/protectiveLoader";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,6 +26,7 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Dashboard />,
+        loader: protectiveLoader,
         children: [
           { index: true, element: <StatusPage /> },
           {
@@ -34,11 +39,13 @@ const router = createBrowserRouter([
         ],
       },
       { path: "login", element: <LoginPage /> },
-      { path: "signup", element: <SignupPage /> },
+      { path: "signup", element: <SignupPage />, action: signUpAction },
     ],
   },
 ]);
 
 export default function App() {
+  const user = useSelector((state) => state.auth.currentUser);
+  console.log(user);
   return <RouterProvider router={router} />;
 }
