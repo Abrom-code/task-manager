@@ -1,10 +1,10 @@
 import { redirect } from "react-router";
-import { store } from "../store";
+import { auth } from "../firebase";
 
 export const protectiveLoader = () => {
-  const currentUser = store.getState().auth.currentUser;
+  const currentUser = auth.currentUser;
 
   if (currentUser === null) {
-    return redirect("/signup");
+    return redirect("/login");
   }
 };

@@ -3,17 +3,20 @@ import { auth } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
+import { redirect } from "react-router";
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    currentUser: JSON.parse(localStorage.getItem("user")) || null,
+    currentUser: null,
     loading: false,
   },
   reducers: {
     setUser(state, action) {
       const user = action.payload;
+      console.log(user);
       state.currentUser = user;
     },
     removeUser(state, action) {
@@ -42,15 +45,9 @@ export const signUpAction = async ({ request }) => {
     return { error: "Please confirm the correct password!" };
 
   try {
-    const user = (await createUserWithEmailAndPassword(auth, email, password))
-      .user;
+    await createUserWithEmailAndPassword(auth, email, password);
 
-    const userData = {
-      uid: user.uid,
-      email: user.email,
-      accessToken: user.accessToken,
-    };
-    return { userData };
+    return redirect("/dashboard");
   } catch (error) {
     return { error: error.code };
   }
@@ -68,15 +65,21 @@ export const login = async ({ request }) => {
     return { error: "The password must be atleast6 character!" };
 
   try {
-    const user = (await signInWithEmailAndPassword(auth, email, password)).user;
+    await signInWithEmailAndPassword(auth, email, password);
 
-    const userData = {
-      uid: user.uid,
-      email: user.email,
-      accessToken: user.accessToken,
-    };
-    return { userData };
+    return redirect("/dashboard");
   } catch (error) {
     return { error: error.code };
   }
+};
+
+export const handleLogOut = async () => {
+  signOut(auth)
+    .then(() => {
+      localStorage.removeItem("user");
+      return redirect("/");
+    })
+    .catch((error) => {
+      return { error: error.code };
+    });
 };

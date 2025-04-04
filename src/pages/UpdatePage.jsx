@@ -9,7 +9,7 @@ function UpdatePage() {
   const currentTask = task?.find((task) => task.id === Number(taskId));
 
   return (
-    <div className=" p-4 shadow rounded-sm bg-gray-100 md:w-[80%] lg:w-[70%] dark:bg-[#323232d8]">
+    <div className=" p-4 shadow rounded-sm bg-gray-100 md:w-[80%] lg:w-[70%] dark:bg-gray-800">
       <Update currentTask={currentTask} />
     </div>
   );

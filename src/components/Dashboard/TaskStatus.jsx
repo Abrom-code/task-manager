@@ -2,9 +2,12 @@ import React from "react";
 import { PieChart, BarChart } from "@mui/x-charts";
 import CalculateTasks from "../../utils/CalculateTasks";
 import formatteDate from "../../utils/formattedDate";
+import { useSelector } from "react-redux";
 
 function TaskStatus() {
+  const userData = useSelector((state) => state.auth.currentUser);
   const {
+    allTasks,
     pendingTasks,
     progressTasks,
     completedTasks,
@@ -28,9 +31,15 @@ function TaskStatus() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full ">
-      <div className="col-span-1 md:col-span-2 w-full bg-gray-100 shadow-sm flex justify-between p-4 items-center gap-6 dark:bg-[#323232d8]">
+      <div className="col-span-1 md:col-span-2 w-full bg-gray-100 shadow-sm flex justify-between p-4 items-center gap-6 dark:bg-gray-800">
         <div>
-          <p className=" font-bold">Hello MIKE</p>
+          <p>
+            Hello{" "}
+            <span className=" font-bold font-serif text-2xl">
+              {" "}
+              {userData?.email.slice(0, 3)}...m
+            </span>
+          </p>
           <p className=" pl-2 text-gray-500 dark:text-gray-400">
             {formattedDate}
           </p>
@@ -47,55 +56,63 @@ function TaskStatus() {
           ))}
         </div>
       </div>
-      <div className="flex flex-col items-center bg-gray-100 shadow-sm  p-4 dark:bg-[#323232d8]">
+      <div className="flex flex-col items-center bg-gray-100 shadow-sm  p-4 dark:bg-gray-800">
         <p className=" font-semibold text-cyan-500 text-2xl  ">
           Task Distribution
         </p>
-        <PieChart
-          height={250}
-          series={[
-            {
-              data: chartData,
-              innerRadius: 70,
-              arcLabelMinAngle: 10,
-              colors: chartData.map((data) => data.color),
-              labelStyle: { fontSize: 14 },
-            },
-          ]}
-          sx={{
-            "& text": {
-              fill: "black",
-            },
+        {allTasks === 0 ? (
+          <p>Please Create a new task!</p>
+        ) : (
+          <PieChart
+            height={250}
+            series={[
+              {
+                data: chartData,
+                innerRadius: 70,
+                arcLabelMinAngle: 10,
+                colors: chartData.map((data) => data.color),
+                labelStyle: { fontSize: 14 },
+              },
+            ]}
+            sx={{
+              "& text": {
+                fill: "black",
+              },
 
-            ".dark & text": {
-              fill: "white !important",
-            },
-          }}
-        />
+              ".dark & text": {
+                fill: "white !important",
+              },
+            }}
+          />
+        )}
       </div>
-      <div className="flex flex-col items-center bg-gray-100 shadow-sm  p-4 dark:bg-[#323232d8]">
+      <div className="flex flex-col items-center bg-gray-100 shadow-sm  p-4 dark:bg-gray-800">
         <p className=" font-semibold text-cyan-500 text-2xl  ">
           Task Priority Label
         </p>
-        <BarChart
-          xAxis={[
-            {
-              scaleType: "band",
-              data: barData.map((data) => data.label),
-            },
-          ]}
-          series={[{ data: barData.map((data) => data.value) }]}
-          width={300}
-          height={300}
-          sx={{
-            "& text": {
-              fill: "black",
-            },
-            ".dark & text": {
-              fill: "white !important",
-            },
-          }}
-        />
+        {allTasks === 0 ? (
+          <p>Please Create a new task!</p>
+        ) : (
+          <BarChart
+            xAxis={[
+              {
+                scaleType: "band",
+                data: barData.map((data) => data.label),
+              },
+            ]}
+            series={[{ data: barData.map((data) => data.value) }]}
+            width={300}
+            height={300}
+            sx={{
+              "& text": {
+                fill: "black",
+              },
+              ".dark & text": {
+                fill: "white !important",
+              },
+            }}
+          />
+        )}
       </div>
     </div>
   );
